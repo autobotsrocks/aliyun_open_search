@@ -1,0 +1,4 @@
+ACCESS_KEY_ID: "your access_key_id"
+ACCESS_KEY_SECRET: "your access_key_secret"
+
+OPEN_SEARCH_HOST: http://opensearch-cn-hangzhou.aliyuncs.com
