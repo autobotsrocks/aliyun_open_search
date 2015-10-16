@@ -4,7 +4,6 @@ describe AliyunOpenSearch::Base do
   context "AliyunOpenSearch::Base.signature" do
     it "signatures params" do
       signature = AliyunOpenSearch::Base.signature(a: 1)
-
       expect(signature).to eq "yHE9b738jZdhYmbDTFsgUncQ4go="
     end
   end
