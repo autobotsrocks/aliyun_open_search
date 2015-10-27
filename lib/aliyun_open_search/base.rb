@@ -22,7 +22,7 @@ module AliyunOpenSearch
       end.join("&")
 
       url = (special_base_url || base_url) + "?" + encoded_params
-      #Rails.logger.info url if defined?(Rails) and !Ralis.logger.nil?
+      Rails.logger.info url if defined?(Rails) and !Rails.logger.nil?
 
       URI(url)
     end
