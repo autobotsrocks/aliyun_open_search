@@ -1,5 +1,6 @@
 require "base64"
 require "json"
+require "uri"
 
 module AliyunOpenSearch
   class Base
@@ -21,7 +22,7 @@ module AliyunOpenSearch
       end.join("&")
 
       url = (special_base_url || base_url) + "?" + encoded_params
-      Rails.logger.info url if defined?(Rails)
+      #Rails.logger.info url if defined?(Rails) and !Ralis.logger.nil?
 
       URI(url)
     end

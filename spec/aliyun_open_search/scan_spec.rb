@@ -1,9 +1,10 @@
 require "spec_helper"
 
 RSpec.describe AliyunOpenSearch::Scan do
+  let(:app_name) { ENV.fetch("APP_NAME") }
   context "AliyunOpenSearch::Scan.new" do
     before do
-      @scan_service = AliyunOpenSearch::Scan.new("test")
+      @scan_service = AliyunOpenSearch::Scan.new(app_name)
     end
 
     it "sends first request to get request_id" do

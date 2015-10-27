@@ -7,11 +7,11 @@ describe AliyunOpenSearch::Search do
     }
   end
 
-  let(:index_name) { "test" }
+  let(:app_name) { ENV.fetch("APP_NAME") }
 
   context "AliyunOpenSearch::Syncs.new(app_name).execute(params)" do
     it "send request directly" do
-      res = AliyunOpenSearch::Search.new(index_name).execute(params)
+      res = AliyunOpenSearch::Search.new(app_name).execute(params)
 
       expect(JSON.load(res)["status"]).to eq "OK"
     end
