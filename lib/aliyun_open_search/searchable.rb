@@ -27,7 +27,19 @@ module AliyunOpenSearch
       end
       
       def opensearch(keyword, options={})
-        #code
+        per_page = (options[:per_page] || 10).to_i
+        start = ((options[:page] || 1).to_i - 1) * per_page
+        query = 'query=' + keyword.split().map{|k| "default:'#{k}'"}.join(' OR ')
+        config = "config=start:#{start},hit:#{per_page}"
+        sort = options[:order].nil? ? nil : "sort=#{options[:order]}"
+        params = {
+          query: [query, config, sort],
+          fetch_fields: :id,
+        }
+        response = JSON.load(AliyunOpenSearch::Search.new(self.app_name).execute(params))
+        puts response
+        raise "Aliyun opensearch fail, return: #{response.to_s}" unless response['status'] == 'OK'
+        response['result']
       end
     end
   end
