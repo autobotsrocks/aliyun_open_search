@@ -5,6 +5,12 @@ module AliyunOpenSearch
     extend ActiveSupport::Concern
     
     module ClassMethods
+      
+      #同步数据到阿里云搜索
+      #传入：无
+      #返回：hash格式的结果：
+      #       status      调用结果，OK仅代表接收数据成功，数据处理过程仍有可能出错
+      #       request_id  任务请求id
       def update_opensearch
         params = {
           action: :push,
@@ -26,6 +32,18 @@ module AliyunOpenSearch
         response_body = JSON.load(response.body)
       end
       
+      #执行全文搜索，固定只返回搜索结果的记录id，不返回其它字段
+      #传入：keyword  以空格分隔的多个搜索关键字
+      #     options  hash可选参数：
+      #                per_page  每页记录数，缺省值=10
+      #                page      返回第几页记录，从1起计，缺省值=1
+      #                order     排序要求，如'-RANK;+created_at'
+      #返回：hash格式的搜索结果：
+      #       searchtime  搜索耗时，秒
+      #       total       搜索得到的总记录数
+      #       num         本次返回的记录数
+      #       viewtotal   最大返回记录数
+      #       items       返回的记录，每条记录含id和index_name两项
       def opensearch(keyword, options={})
         per_page = (options[:per_page] || 10).to_i
         start = ((options[:page] || 1).to_i - 1) * per_page
