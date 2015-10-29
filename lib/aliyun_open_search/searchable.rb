@@ -8,12 +8,12 @@ module AliyunOpenSearch
       def update_opensearch
         params = {
           action: :push,
-          table_name: self.app_table_name,
+          table_name: self.aos_table_name,
           items: []
         }
         self.send(self.aos_add_scope).each do |t|
           params[:items] << { cmd: 'add',
-                              fields: self.app_fields.inject(Hash.new){|h,f| h.merge({f => t.send(f)})}
+                              fields: self.aos_fields.inject(Hash.new){|h,f| h.merge({f => t.send(f)})}
                             }
         end
         if self.aos_delete_scope
@@ -22,7 +22,7 @@ module AliyunOpenSearch
           end
         end
         puts "params size = #{params.to_json.size}"
-        response = AliyunOpenSearch::Syncs.new(self.app_name).execute(params)
+        response = AliyunOpenSearch::Syncs.new(self.aos_app_name).execute(params)
         response_body = JSON.load(response.body)
       end
       
@@ -36,7 +36,7 @@ module AliyunOpenSearch
           query: [query, config, sort],
           fetch_fields: :id,
         }
-        response = JSON.load(AliyunOpenSearch::Search.new(self.app_name).execute(params))
+        response = JSON.load(AliyunOpenSearch::Search.new(self.aos_app_name).execute(params))
         puts response
         raise "Aliyun opensearch fail, return: #{response.to_s}" unless response['status'] == 'OK'
         response['result']
