@@ -11,14 +11,14 @@ module AliyunOpenSearch
           table_name: self.app_table_name,
           items: []
         }
-        self.unscoped.all.each do |t|
-          params[:items] << if t.is_online then
-            {
-              cmd: 'update',
-              fields: self.app_fields.inject(Hash.new){|h,f| h.merge({f => t.send(f)})}
-            }
-          else
-            {cmd: 'delete', fields: {id: t.id}}
+        self.send(self.aos_add_scope).each do |t|
+          params[:items] << { cmd: 'add',
+                              fields: self.app_fields.inject(Hash.new){|h,f| h.merge({f => t.send(f)})}
+                            }
+        end
+        if self.aos_delete_scope
+          self.send(self.aos_delete_scope).each do |t|
+            params[:items] << {cmd: 'delete', fields: {id: t.id}}
           end
         end
         puts "params size = #{params.to_json.size}"

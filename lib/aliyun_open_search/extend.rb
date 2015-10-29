@@ -1,15 +1,17 @@
 module AliyunOpenSearch
   module Extend
     module Searchable
-      def acts_as_searchable(fields, app_name, table_name=nil)
+      def setup_opensearch(app_name, fields, options={})
         require 'aliyun_open_search/searchable'
         include AliyunOpenSearch::Searchable
         
         class_eval do
-          class_attribute :app_name, :app_table_name, :app_fields
-          self.app_name = app_name
-          self.app_table_name = table_name || self.table_name.to_sym
-          self.app_fields = fields
+          class_attribute :aos_app_name, :aos_table_name, :aos_fields, :aos_add_scope, :aos_delete_scope
+          self.aos_app_name = app_name
+          self.aos_fields = fields
+          self.aos_table_name = options[:table_name] || self.table_name.to_sym
+          self.aos_add_scope = options[:add_scope] || :all
+          self.aos_delete_scope = options[:delete_scope]
         end
       end
     end
